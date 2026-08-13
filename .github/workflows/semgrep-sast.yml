@@ -1,0 +1,26 @@
+name: Semgrep SAST Scan
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep-sast:
+    name: Run Semgrep SAST
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep scan
+        run: |
+          echo "Starting Semgrep SAST scan..."
+          semgrep scan --config=auto --json --output=semgrep-results.json
+          echo "Scan completed. Results logged below:"
+          cat semgrep-results.json
